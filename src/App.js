@@ -8,7 +8,9 @@ function App() {
     <div className={styles.App}>
       <NavBar />
       <Container className={styles.Main}>
-        <h1>Home Page</h1>
+        <Switch>
+          <Route exact path="/" render={() => <h1>Home Page</h1>} />
+        </Switch>
         <h1>Sign In</h1>
       </Container>
     </div>
