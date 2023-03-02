@@ -68,7 +68,7 @@ function SignInForm() {
                             <Form.Control
                                 className={styles.Input}
                                 type="password"
-                                placeholder="password"
+                                placeholder="Enter Password"
                                 name="password"
                                 value={password}
                                 onChange={handleChange}
