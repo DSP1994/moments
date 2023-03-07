@@ -36,11 +36,11 @@ export const CurrentUserProvider = ({ children }) => {
                         if (prevCurrentUser) {
                             history.push('/signin')
                         }
-                        return null
-                    })
-                    return config
+                        return null;
+                    });
+                    return config;
                 }
-                return config
+                return config;
             },
             (err) => {
                 return Promise.reject(err);
@@ -54,14 +54,14 @@ export const CurrentUserProvider = ({ children }) => {
                     try {
                         await axios.post('/dj-rest-auth/token/refresh')
                     } catch (err) {
-                        setCurrentUser(prevCurrentUser => {
+                        setCurrentUser((prevCurrentUser) => {
                             if (prevCurrentUser) {
-                                history.push('/signin')
+                                history.push('/signin');
                             }
-                            return null
-                        })
+                            return null;
+                        });
                     }
-                    return axios(err.config)
+                    return axios(err.config);
                 }
                 return Promise.reject(err);
             }
