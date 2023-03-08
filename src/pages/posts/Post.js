@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar"
 import styles from "../../styles/Post.module.css";
 import { axiosRes } from '../../api/axiosDefaults';
+import { MoreDropdown } from '../../components/MoreDropdown';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 
 const Post = (props) => {
@@ -26,6 +28,20 @@ const Post = (props) => {
 
     const currentUser = useCurrentUser();
     const is_owner = currentUser?.username === owner;
+    const history = useHistory();
+
+    const handleEdit = () => {
+        history.push(`/posts/${id}/edit`)
+    }
+
+    const handleDelete = async () => {
+        try {
+            await axiosRes.delete(`/posts/${id}`)
+            history.goBack();
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     const handleLike = async () => {
         try {
@@ -34,7 +50,7 @@ const Post = (props) => {
                 ...prevPosts,
                 results: prevPosts.results.map((post) => {
                     return post.id === id
-                        ? { ...post, likes_count: post.likes_count + 1, liked_id: data.id }
+                        ? { ...post, likes_count: post.likes_count + 1, like_id: data.id }
                         : post;
                 })
             }))
@@ -60,7 +76,7 @@ const Post = (props) => {
         }
     }
 
-    return <Card className={styles.Postt}>
+    return <Card className={styles.Post}>
         <Card.Body>
             <Media className="align-items-center justify-content-between">
                 <Link to={`/profiles/${profile_id}`}>
@@ -69,7 +85,11 @@ const Post = (props) => {
                 </Link>
                 <div className='d-flex align-items-center' >
                     <span>{updated_at}</span>
-                    {is_owner && postPage && '...'}
+                    {is_owner && postPage && (
+                        <MoreDropdown
+                            handleEdit={handleEdit}
+                            handleDelete={handleDelete}
+                        />)}
                 </div>
             </Media>
         </Card.Body>
