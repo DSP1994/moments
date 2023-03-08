@@ -1,54 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import { Container } from 'react-bootstrap'
-import appStyles from '../../src/App.module.css'
-import { axiosReq } from '../api/axiosDefaults';
-import Asset from '../components/Asset';
-import { useCurrentUser } from '../contexts/CurrentUserContext';
-import Profile from './Profile';
+import React from "react";
+import { Container } from "react-bootstrap";
+import appStyles from "../../src/App.module.css";
+import Asset from "../../src/components/Asset";
+import { useProfileData } from "../../src/contexts/ProfileDataContext";
+import Profile from "../../src/profiles/Profile";
 
 const PopularProfiles = ({ mobile }) => {
-    const [profileData, setProfileData] = useState({
-        // we will use a profile page later
-        pageProfile: { results: [] },
-        popularProfiles: { results: [] },
-    });
-    const { popularProfiles } = profileData
-    const currentUser = useCurrentUser()
-
-    useEffect(() => {
-        const handleMount = async () => {
-            try {
-                const { data } = await axiosReq.get(
-                    '/profiles/?ordering=-followers_count'
-                );
-                setProfileData(prevState => ({
-                    ...prevState,
-                    popularProfiles: data,
-                }));
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        handleMount()
-    }, [currentUser])
+    const { popularProfiles } = useProfileData();
 
     return (
-
         <Container
-            className={`${appStyles.Content} ${mobile && 'd-lg-none text-center mb-3'
+            className={`${appStyles.Content} ${mobile && "d-lg-none text-center mb-3"
                 }`}
         >
             {popularProfiles.results.length ? (
                 <>
-                    <p>Most followed Profiles.</p>
+                    <p>Most followed profiles.</p>
                     {mobile ? (
-                        <div className='d-flex justify-content-around'>
+                        <div className="d-flex justify-content-around">
                             {popularProfiles.results.slice(0, 4).map((profile) => (
                                 <Profile key={profile.id} profile={profile} mobile />
                             ))}
                         </div>
                     ) : (
-                        popularProfiles.results.map(profile => (
+                        popularProfiles.results.map((profile) => (
                             <Profile key={profile.id} profile={profile} />
                         ))
                     )}
@@ -57,7 +32,7 @@ const PopularProfiles = ({ mobile }) => {
                 <Asset spinner />
             )}
         </Container>
-    )
-}
+    );
+};
 
-export default PopularProfiles
+export default PopularProfiles;
